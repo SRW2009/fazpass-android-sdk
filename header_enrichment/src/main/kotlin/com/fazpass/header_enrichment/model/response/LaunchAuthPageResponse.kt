@@ -1,5 +1,5 @@
 package com.fazpass.header_enrichment.model.response
 
-data class RedirectAuthResponse(
+data class LaunchAuthPageResponse(
     var none: Unit
 )
