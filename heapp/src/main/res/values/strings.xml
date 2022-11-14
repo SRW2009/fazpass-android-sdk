@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">HE App</string>
     <!-- Strings related to login -->
-    <string name="prompt_phone">Phone Number</string>
+    <string name="prompt_phone">621234567890</string>
     <string name="action_sign_in">Authenticate</string>
     <string name="welcome">"Welcome !"</string>
     <string name="invalid_phone">Phone format is incorrect</string>

@@ -11,12 +11,11 @@ import android.util.ArrayMap
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.fazpass.header_enrichment.model.request.GetAuthPageRequest
 import com.fazpass.header_enrichment.model.request.CheckResultRequest
-import com.fazpass.header_enrichment.model.response.GetAuthPageResponse
+import com.fazpass.header_enrichment.model.request.GetAuthPageRequest
 import com.fazpass.header_enrichment.model.response.BaseResponse
 import com.fazpass.header_enrichment.model.response.CheckResultResponse
-import com.fazpass.header_enrichment.model.response.LaunchAuthPageResponse
+import com.fazpass.header_enrichment.model.response.GetAuthPageResponse
 import com.google.zxing.integration.android.IntentIntegrator
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -86,10 +85,12 @@ open class FazpassHE {
         }
 
         private fun authenticate(url: String, onComplete: OnComplete<Unit?>) {
-            he.launchAuthPage(url, object: OnComplete<BaseResponse<LaunchAuthPageResponse>> {
+            he.launchAuthPage(url, object: OnComplete<BaseResponse<Unit?>> {
 
-                override fun onSuccess(result: BaseResponse<LaunchAuthPageResponse>) {
-                    onComplete.onSuccess(null)
+                override fun onSuccess(result: BaseResponse<Unit?>) {
+                    println("${result.status} ${result.message} ${result.code} ${result.data}")
+                    if (result.status) onComplete.onSuccess(null)
+                    else onFailure(Throwable(result.message))
                     /*he.checkResult(object: OnComplete<BaseResponse<CheckResultResponse>> {
 
                         override fun onSuccess(result: BaseResponse<CheckResultResponse>) {
@@ -126,9 +127,9 @@ open class FazpassHE {
         }
 
         private fun isCarrierMatch(phone: String): Boolean {
-            if (phone.length < 3) return false
+            if (phone.length < 4) return false
             val carrierName = telephonyManager?.networkOperatorName ?: ""
-            return DataCarrierUtility.check(phone.substring(0..3), carrierName)
+            return DataCarrierUtility.check(phone.substring(0..4), carrierName)
         }
     }
 
@@ -141,7 +142,7 @@ open class FazpassHE {
                 .subscribe(onComplete::onSuccess, onComplete::onFailure)
         }
 
-        override fun launchAuthPage(url: String, onComplete: OnComplete<BaseResponse<LaunchAuthPageResponse>>) {
+        override fun launchAuthPage(url: String, onComplete: OnComplete<BaseResponse<Unit?>>) {
             val uri = Uri.parse(url)
             val fazpass by lazy { UseCase.start("${uri.scheme}://${uri.host}/") }
             val queries = ArrayMap<String, String>()

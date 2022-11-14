@@ -7,7 +7,7 @@ internal class DataCarrierUtility {
         fun check(phonePrefix: String, carrierName: String) : Boolean {
             val alias = getCarrierAlias(carrierName.uppercase().split(" ")[0])
 
-            return collection[alias]?.contains(phonePrefix) ?: false
+            return collection[alias]?.contains(phonePrefix.replaceRange(0..1, "0")) ?: false
         }
 
         private const val telkomsel = "TELKOMSEL"

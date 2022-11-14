@@ -1,6 +1,7 @@
 package com.fazpass.heapp.ui.login
 
 import android.content.Context
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,10 +48,11 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
-    // A placeholder username validation check
+    // A placeholder phone validation check
     private fun isPhoneValid(phone: String): Boolean {
         return phone.isNotBlank()
-                && phone.first()=='0'
+                && phone.substring(0,2)=="62"
+                && phone.isDigitsOnly()
                 && phone.length > 9
     }
 }

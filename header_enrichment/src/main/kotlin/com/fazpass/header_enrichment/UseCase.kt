@@ -5,7 +5,6 @@ import com.fazpass.header_enrichment.model.request.GetAuthPageRequest
 import com.fazpass.header_enrichment.model.response.BaseResponse
 import com.fazpass.header_enrichment.model.response.CheckResultResponse
 import com.fazpass.header_enrichment.model.response.GetAuthPageResponse
-import com.fazpass.header_enrichment.model.response.LaunchAuthPageResponse
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -16,7 +15,7 @@ import retrofit2.http.*
 
 internal interface UseCase {
     @POST("request/auth-page") fun auth(@Header("Authorization") token: String, @Body requestBody: GetAuthPageRequest) : Observable<BaseResponse<GetAuthPageResponse>>
-    @GET("{path}") fun redirectAuth(@Path("path") path: String, @QueryMap queries: Map<String, String>) : Observable<BaseResponse<LaunchAuthPageResponse>>
+    @GET("{path}") fun redirectAuth(@Path("path") path: String, @QueryMap queries: Map<String, String>) : Observable<BaseResponse<Unit?>>
     @POST("check/result") fun redirectCheckResult(@Header("Authorization") token: String, @Body requestBody: CheckResultRequest) : Observable<BaseResponse<CheckResultResponse>>
 
     companion object{
