@@ -51,7 +51,6 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
     // A placeholder phone validation check
     private fun isPhoneValid(phone: String): Boolean {
         return phone.isNotBlank()
-                && phone.substring(0,2)=="62"
                 && phone.isDigitsOnly()
                 && phone.length > 9
     }

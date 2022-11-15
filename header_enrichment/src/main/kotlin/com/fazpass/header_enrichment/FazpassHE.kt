@@ -88,7 +88,6 @@ open class FazpassHE {
             he.launchAuthPage(url, object: OnComplete<BaseResponse<Unit?>> {
 
                 override fun onSuccess(result: BaseResponse<Unit?>) {
-                    println("${result.status} ${result.message} ${result.code} ${result.data}")
                     if (result.status) onComplete.onSuccess(null)
                     else onFailure(Throwable(result.message))
                     /*he.checkResult(object: OnComplete<BaseResponse<CheckResultResponse>> {
@@ -127,9 +126,16 @@ open class FazpassHE {
         }
 
         private fun isCarrierMatch(phone: String): Boolean {
-            if (phone.length < 4) return false
-            val carrierName = telephonyManager?.networkOperatorName ?: ""
-            return DataCarrierUtility.check(phone.substring(0..4), carrierName)
+            val carrierName = telephonyManager?.networkOperatorName ?: return false
+
+            val is0First = phone.first()=='0'
+            if (is0First && phone.length < 3) return false
+            if (!is0First && phone.length < 4) return false
+
+            val finalPhone =
+                if (is0First) phone
+                else phone.replaceRange(0..1, "0")
+            return DataCarrierUtility.check(finalPhone.substring(0..3), carrierName)
         }
     }
 

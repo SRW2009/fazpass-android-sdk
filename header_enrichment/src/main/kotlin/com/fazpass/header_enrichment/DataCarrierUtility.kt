@@ -5,9 +5,13 @@ import android.util.ArrayMap
 internal class DataCarrierUtility {
     companion object {
         fun check(phonePrefix: String, carrierName: String) : Boolean {
-            val alias = getCarrierAlias(carrierName.uppercase().split(" ")[0])
+            val alias = getCarrierAlias(
+                carrierName.uppercase()
+                .split(" ")[0]
+                .split("-")[0]
+            )
 
-            return collection[alias]?.contains(phonePrefix.replaceRange(0..1, "0")) ?: false
+            return collection[alias]?.contains(phonePrefix) ?: false
         }
 
         private const val telkomsel = "TELKOMSEL"
@@ -40,11 +44,14 @@ internal class DataCarrierUtility {
                 "0813", "0832", "0833",
                 "0838"
             ),
-            smartfren to listOf(
+            /**
+             * Blacklist smartfren
+             */
+            /*smartfren to listOf(
                 "0881", "0882", "0883",
                 "0884", "0885", "0886",
                 "0887", "0888", "0889"
-            )
+            )*/
         )
 
         private fun getCarrierAlias(carrierName: String) : String = when (carrierName) {
@@ -53,6 +60,7 @@ internal class DataCarrierUtility {
             "SIMPATI" -> telkomsel
             "LOOP" -> telkomsel
             "BY.U" -> telkomsel
+            "TSEL" -> telkomsel
             "IM3" -> indosat
             "MENTARI" -> indosat
             "MATRIX" -> indosat
