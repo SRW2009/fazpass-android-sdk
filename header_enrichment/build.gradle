@@ -1,7 +1,10 @@
 plugins {
     id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android'
+    id 'maven-publish'
 }
+group = 'com.fazpass.header_enrichment'
+version = '1.0.0'
 
 android {
     compileSdk 33
@@ -27,6 +30,36 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+}
+
+def getVersionName = { ->
+    return "1.0.0" // Replace with version Name
+}
+
+def getArtifactId = { ->
+    return "header_enrichment" // Replace with library name ID
+}
+
+publishing {
+    publications {
+        bar(MavenPublication) {
+            groupId = "com.fazpass"
+            artifactId = getArtifactId()
+            version = getVersionName()
+            artifact("$buildDir/outputs/aar/${getArtifactId()}-release.aar")
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
 }
 
 dependencies {
@@ -47,3 +80,10 @@ dependencies {
     // qr scanner
     implementation 'com.journeyapps:zxing-android-embedded:4.2.0'
 }
+
+tasks.register('compileKotlin', {
+    kotlinOptions.jvmTarget = "1.8"
+})
+tasks.register('compileTestKotlin', {
+    kotlinOptions.jvmTarget = "1.8"
+})
